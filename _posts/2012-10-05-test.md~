@@ -1,0 +1,8 @@
+---
+layout: post
+category : test
+tags : [test, beginner, jekyll]
+---
+{% include JB/setup %}
+
+ほほう、ほほう
