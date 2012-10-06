@@ -23,6 +23,7 @@ tagline: y-matuwitterさんのチラシの裏的なアレ。
       </script>
     </div>
     <p>{{ post.content }}</p>
+    <a href="{{ post.url }}">コメントを見る</a>
   </div>
 {% endfor %}
 </div>
