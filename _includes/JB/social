@@ -1,0 +1,13 @@
+{% if site.JB.social.providers %}
+
+{% for provider in site.JB.social.providers %}
+
+{% case provider %}
+{% when "facebook" %}
+  {% include JB/social-providers/facebook %}
+{% when "twitter" %}
+  {% include JB/social-providers/twitter %}
+{% endcase %}
+
+{% endfor %}
+{% endif %}
