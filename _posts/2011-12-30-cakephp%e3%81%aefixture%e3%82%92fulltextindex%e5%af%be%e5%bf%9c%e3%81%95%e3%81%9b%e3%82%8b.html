@@ -1,0 +1,66 @@
+---
+layout: post
+title: CakePHPのFixtureをFulltextIndex対応させる
+date: 2011-12-30 01:46:50.000000000 +09:00
+categories:
+- php
+tags: []
+status: publish
+type: post
+published: true
+meta:
+  _edit_last: '1'
+  _syntaxhighlighter_encoded: '1'
+  _aioseop_keywords: cakephp,php,fixture,schema
+  _aioseop_description: CakePHPのFixtureをFulltextIndex対応させるときにはまったメモ。
+  _aioseop_title: CakePHPのFixtureをFulltextIndex対応させる
+author:
+  login: y_matsuwitter
+  email: me@yuki-matsumoto.com
+  display_name: y_matsuwitter
+  first_name: ''
+  last_name: ''
+---
+<p>もう年の暮れ、本当はこの一年間で悟ったN個の事みたいなエントリ書くべきかもしれないけども、今日ハマったポイントに付いて書くべきと天の声があったので書く。</p>
+<p>CakePHP + MySQL + Groongaを使って全文検索をサクっと実装していて、Fixtureの中にGroongaのFULLTEXT INDEXを突っ込みたかったのに、<br />
+[php]<br />
+var $fields = array(<br />
+		'id' =&gt; array('type' =&gt; 'integer', 'null' =&gt; false, 'default' =&gt; NULL, 'key' =&gt; 'primary'),<br />
+		'body' =&gt; array('type' =&gt; 'text', 'null' =&gt; true, 'default' =&gt; NULL, 'key' =&gt; 'index', 'collate' =&gt; 'utf8_general_ci', 'charset' =&gt; 'utf8'),<br />
+		'created' =&gt; array('type' =&gt; 'datetime', 'null' =&gt; true, 'default' =&gt; NULL),<br />
+		'modified' =&gt; array('type' =&gt; 'datetime', 'null' =&gt; true, 'default' =&gt; NULL),<br />
+		'indexes' =&gt; array('PRIMARY' =&gt; array('column' =&gt; 'id', 'unique' =&gt; 1), 'FULLTEXT' =&gt; array('column' =&gt; 'body(1024)')),<br />
+		'tableParameters' =&gt; array('charset' =&gt; 'utf8', 'collate' =&gt; 'utf8_general_ci', 'engine' =&gt; 'groonga')<br />
+	);<br />
+[/php]<br />
+みたいな感じでFixtureのfieldsに書いたらエラー出たんですよ。</p>
+<p>Google先生に聞いたところ、CakephpのFixtureがFULLTEXT　INDEXに対応してないという旨を発見したので、じゃあ俺が対応させるか、ということで対応させてみた。</p>
+<p>というわけで、その方法。<br />
+CAKEHOME/cake/libs/model/datasources/dbo_sources.php　の2808行目付近のbuildIndex関数に以下を追記。<br />
+[php]<br />
+/*2808行目あたり*/<br />
+	function buildIndex($indexes, $table = null) {<br />
+		$join = array();<br />
+		foreach ($indexes as $name =&gt; $value) {<br />
+			$out = '';<br />
+            /* 追記 */<br />
+            if($name == 'FULLTEXT') {<br />
+                $out = 'FULLTEXT INDEX('.$value['column'].')';<br />
+                $join[] = $out;<br />
+                continue;<br />
+            }<br />
+            /* 追記ここまで */<br />
+[/php]</p>
+<p>こんな感じに書いておくと、Fixtureからテーブルを作る際に、FULLTEXT INDEXをちゃんと生成してくれます。<br />
+ちょっと強引な対応かもしれないけどこんな感じです。</p>
+<p>こうすることで、<br />
+[php]<br />
+$fields = array(<br />
+                /*******省略******/<br />
+                indexes' =&gt; array(/*******省略******/, 'FULLTEXT' =&gt; array('column' =&gt; 'body(1024)')),<br />
+                /*******省略******/<br />
+                );<br />
+[/php]<br />
+とfixtureに書いておけばFULLTEXT INDEXが生成される。<br />
+お役に立てれば幸い。</p>
+<p>もっといい手があれば教えて欲しい。</p>

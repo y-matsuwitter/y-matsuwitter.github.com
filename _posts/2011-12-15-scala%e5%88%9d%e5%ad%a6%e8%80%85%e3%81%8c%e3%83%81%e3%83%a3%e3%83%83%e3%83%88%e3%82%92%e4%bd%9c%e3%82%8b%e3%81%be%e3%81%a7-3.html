@@ -1,0 +1,287 @@
+---
+layout: post
+title: Scala初学者がチャットを作るまで 3
+date: 2011-12-15 07:14:24.000000000 +09:00
+categories:
+- Scala
+- 未分類
+tags: []
+status: publish
+type: post
+published: true
+meta:
+  _edit_last: '1'
+  _syntaxhighlighter_encoded: '1'
+author:
+  login: y_matsuwitter
+  email: me@yuki-matsumoto.com
+  display_name: y_matsuwitter
+  first_name: ''
+  last_name: ''
+---
+<p>とりあえずWebSocketとつなごうと必死だった。<br />
+が、そもそもjava servletのこともマトモに知らなかったので勉強した。</p>
+<p>その記録。</p>
+<p>まずは普通のHttpリクエストを受けられるようにして、servletに関して学ぼうと思った。</p>
+<p>maven使っているので、とりあえずプロジェクト生成。</p>
+<p>[shell]<br />
+mvn archetype:generate<br />
+[/shell]<br />
+捕捉しておくと、以下の条件でプロジェクトを生成した。</p>
+<ul>
+<li>maven-archetype-webapp</li>
+<li>groupId = com.ymatsu.websample</li>
+<li>artifactId = websample</li>
+</ul>
+<p>pom.xmlに以下を追記。※１<br />
+[xml]<br />
+&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;<br />
+  xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd&quot;&gt;</p>
+<p>　  &lt;!-- 中略 --&gt;</p>
+<p>  &lt;repositories&gt;<br />
+    &lt;repository&gt;<br />
+      &lt;id&gt;scala-tools.org&lt;/id&gt;<br />
+      &lt;name&gt;Scala-tools Maven2 Repository&lt;/name&gt;<br />
+      &lt;url&gt;http://scala-tools.org/repo-releases&lt;/url&gt;<br />
+    &lt;/repository&gt;<br />
+  &lt;/repositories&gt;</p>
+<p>  &lt;pluginRepositories&gt;<br />
+    &lt;pluginRepository&gt;<br />
+      &lt;id&gt;scala-tools.org&lt;/id&gt;<br />
+      &lt;name&gt;Scala-tools Maven2 Repository&lt;/name&gt;<br />
+      &lt;url&gt;http://scala-tools.org/repo-releases&lt;/url&gt;<br />
+    &lt;/pluginRepository&gt;<br />
+  &lt;/pluginRepositories&gt;</p>
+<p>  &lt;dependencies&gt;<br />
+    &lt;dependency&gt;<br />
+      &lt;groupId&gt;org.scala-lang&lt;/groupId&gt;<br />
+      &lt;artifactId&gt;scala-library&lt;/artifactId&gt;<br />
+      &lt;version&gt;2.7.2&lt;/version&gt;<br />
+    &lt;/dependency&gt;<br />
+    &lt;dependency&gt;<br />
+      &lt;groupId&gt;javax.servlet&lt;/groupId&gt;<br />
+      &lt;artifactId&gt;servlet-api&lt;/artifactId&gt;<br />
+      &lt;version&gt;2.5&lt;/version&gt;<br />
+    &lt;/dependency&gt;</p>
+<p>    &lt;!-- jetty --&gt;<br />
+    &lt;dependency&gt;<br />
+      &lt;groupId&gt;org.eclipse.jetty&lt;/groupId&gt;<br />
+      &lt;artifactId&gt;jetty-server&lt;/artifactId&gt;<br />
+      &lt;version&gt;7.0.1.v20091125&lt;/version&gt;<br />
+    &lt;/dependency&gt;<br />
+    &lt;dependency&gt;<br />
+      &lt;groupId&gt;org.eclipse.jetty&lt;/groupId&gt;<br />
+      &lt;artifactId&gt;jetty-servlets&lt;/artifactId&gt;<br />
+      &lt;version&gt;7.0.1.v20091125&lt;/version&gt;<br />
+    &lt;/dependency&gt;<br />
+    &lt;dependency&gt;<br />
+      &lt;groupId&gt;org.eclipse.jetty&lt;/groupId&gt;<br />
+      &lt;artifactId&gt;jetty-webapp&lt;/artifactId&gt;<br />
+      &lt;version&gt;7.0.1.v20091125&lt;/version&gt;<br />
+    &lt;/dependency&gt;<br />
+    &lt;dependency&gt;<br />
+      &lt;groupId&gt;org.eclipse.jetty&lt;/groupId&gt;<br />
+      &lt;artifactId&gt;jetty-websocket&lt;/artifactId&gt;<br />
+      &lt;version&gt;7.0.1.v20091125&lt;/version&gt;<br />
+    &lt;/dependency&gt;</p>
+<p>    &lt;dependency&gt;<br />
+      &lt;groupId&gt;junit&lt;/groupId&gt;<br />
+      &lt;artifactId&gt;junit&lt;/artifactId&gt;<br />
+      &lt;version&gt;3.8.1&lt;/version&gt;<br />
+      &lt;scope&gt;test&lt;/scope&gt;<br />
+    &lt;/dependency&gt;<br />
+  &lt;/dependencies&gt;<br />
+  &lt;build&gt;<br />
+    &lt;sourceDirectory&gt;src/main/scala&lt;/sourceDirectory&gt;<br />
+    &lt;outputDirectory&gt;src/main/webapp/WEB-INF/classes&lt;/outputDirectory&gt;<br />
+    &lt;testSourceDirectory&gt;src/test/scala&lt;/testSourceDirectory&gt;<br />
+    &lt;finalName&gt;websample&lt;/finalName&gt;<br />
+    &lt;plugins&gt;<br />
+      &lt;plugin&gt;<br />
+        &lt;groupId&gt;org.mortbay.jetty&lt;/groupId&gt;<br />
+        &lt;artifactId&gt;maven-jetty-plugin&lt;/artifactId&gt;<br />
+        &lt;configuration&gt;<br />
+          &lt;scanIntervalSeconds&gt;10&lt;/scanIntervalSeconds&gt;<br />
+          &lt;webAppConfig&gt;<br />
+            &lt;contextPath&gt;/&lt;/contextPath&gt;<br />
+          &lt;/webAppConfig&gt;<br />
+        &lt;/configuration&gt;<br />
+      &lt;/plugin&gt;<br />
+      &lt;plugin&gt;<br />
+        &lt;groupId&gt;org.scala-tools&lt;/groupId&gt;<br />
+        &lt;artifactId&gt;maven-scala-plugin&lt;/artifactId&gt;<br />
+        &lt;executions&gt;<br />
+          &lt;execution&gt;<br />
+            &lt;goals&gt;<br />
+              &lt;goal&gt;compile&lt;/goal&gt;<br />
+              &lt;goal&gt;testCompile&lt;/goal&gt;<br />
+            &lt;/goals&gt;<br />
+          &lt;/execution&gt;<br />
+        &lt;/executions&gt;<br />
+      &lt;/plugin&gt;<br />
+    &lt;/plugins&gt;<br />
+  &lt;/build&gt;</p>
+<p>&lt;/project&gt;<br />
+[/xml]</p>
+<p>※１ あとで分かるのだが、jettyのバージョンでハマった。</p>
+<p>&nbsp;</p>
+<p>そんでもって、scalaで記述するために必要なディレクトリ生成<br />
+[shell]<br />
+mkdir -p src/main/scala/com/ymatsu/websample<br />
+mkdir -p src/test/scala<br />
+[/shell]</p>
+<p>コードはこんな感じのものを、src/main/scala/以下に適切なpathで配置。<br />
+[scala]<br />
+package com.ymatsu.websample<br />
+import javax.servlet.http._</p>
+<p>class Demo extends HttpServlet {<br />
+   override def doGet(request: HttpServletRequest, response: HttpServletResponse) = response.getWriter().println(&quot;Hello World (From Scala!)&quot;)<br />
+}<br />
+[/scala]<br />
+あとは、web.xmlをsrc/main/webapp/WEB-INF/に配置。<br />
+中身は以下。<br />
+[xml]<br />
+&lt;!DOCTYPE web-app PUBLIC<br />
+ &quot;-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN&quot;<br />
+ &quot;http://java.sun.com/dtd/web-app_2_3.dtd&quot; &gt;</p>
+<p>&lt;web-app&gt;<br />
+  &lt;display-name&gt;Archetype Created Web Application&lt;/display-name&gt;</p>
+<p>  &lt;servlet&gt;<br />
+    &lt;servlet-name&gt;Home&lt;/servlet-name&gt;<br />
+    &lt;servlet-class&gt;com.ymatsu.websample.Demo&lt;/servlet-class&gt;<br />
+  &lt;/servlet&gt;<br />
+  &lt;servlet-mapping&gt;<br />
+    &lt;servlet-name&gt;Home&lt;/servlet-name&gt;<br />
+    &lt;url-pattern&gt;/home&lt;/url-pattern&gt;<br />
+  &lt;/servlet-mapping&gt;<br />
+&lt;/web-app&gt;<br />
+[/xml]</p>
+<p>[shell]<br />
+mvn jetty:run<br />
+[/shell]<br />
+でサーバー起動。<br />
+http://localhost:8080/home　にアクセスしてHello world的な物が表示されればおｋ！！</p>
+<p>んで本題のWebSocket。<br />
+とりあえず<a href="http://d.hatena.ne.jp/yuroyoro/20100316/1268735022">ここ</a>のコードを使わせていただいて動かしてみた。<br />
+[scala]<br />
+package com.ymatsu.websample</p>
+<p>import scala.collection.mutable.Set<br />
+import javax.servlet.http._<br />
+import org.eclipse.jetty.websocket._<br />
+import org.eclipse.jetty.websocket.WebSocket.Outbound</p>
+<p>class ChatServlet extends WebSocketServlet {<br />
+  val clients = Set.empty[ChatWebSocket]</p>
+<p>  override def doGet(req:HttpServletRequest, res:HttpServletResponse ) =<br />
+    getServletContext.getNamedDispatcher(&quot;Home&quot;).forward(req, res)</p>
+<p>  override def doWebSocketConnect(req:HttpServletRequest, protocol:String ) =<br />
+    new ChatWebSocket</p>
+<p>  class ChatWebSocket extends WebSocket {</p>
+<p>    var outbound:Outbound = _</p>
+<p>    override def onConnect(outbound:Outbound ) = {<br />
+      this.outbound = outbound<br />
+      clients += this<br />
+      onMessage( 0, &quot;WebSocket is success!!!&quot;);<br />
+    }</p>
+<p>    override def onMessage(frame:Byte, data:Array[Byte], offset:Int, length:Int ) = {}</p>
+<p>    override def onMessage(frame:Byte, data:String ) =<br />
+      clients.foreach{ c =&gt; c.outbound.sendMessage( frame, data ) }</p>
+<p>    override def onDisconnect = clients -= this</p>
+<p>  }<br />
+}<br />
+[/scala]<br />
+&nbsp;</p>
+<p>そんでもってweb.xmlに適当なパスを追記。(今回はws://localhost:8080/chat)<br />
+また、src/main/webapp直下にindex.htmlとして以下のファイルを配置。<br />
+[html]<br />
+&lt;?xml version='1.0' encoding='utf-8' ?&gt;<br />
+&lt;html&gt;<br />
+  &lt;head&gt;<br />
+    &lt;title&gt;websocket test&lt;/title&gt;<br />
+    &lt;script src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js' type='text/javascript'&gt;&lt;/script&gt;<br />
+    &lt;script type='text/javascript'&gt;<br />
+    var ws = new WebSocket(&quot;ws://localhost:8080/socket&quot;);</p>
+<p>    ws.onmessage = function(e){<br />
+    trace(e.data);<br />
+    };<br />
+    ws.onclose = function(){<br />
+    log(&quot;ws closed&quot;);<br />
+    };<br />
+    ws.onopen = function(){<br />
+    log('connected!!');<br />
+    };</p>
+<p>    $(function(){<br />
+    $('input#post').click(function(){<br />
+        var name = $('input#name').val();<br />
+    var mes = $('input#message').val();<br />
+    ws.send(name+&quot; : &quot;+mes);<br />
+    $('input#message').val(&quot;&quot;);<br />
+    });<br />
+    });<br />
+    function log(message){<br />
+    trace(&quot;[log] &quot;+message);<br />
+    };<br />
+    function trace(message){<br />
+    var mes_div = $('&lt;div /&gt;').html(message);<br />
+    $('div#chat').prepend(mes_div);<br />
+    };<br />
+    &lt;/script&gt;<br />
+  &lt;/head&gt;<br />
+  &lt;body&gt;<br />
+    &lt;form id='message'&gt;<br />
+      &lt;input id='name' size='15' type='text' value='名前' /&gt;<br />
+      &lt;input id='message' size='80' type='text' value='Hello world!!' /&gt;<br />
+      &lt;input id='post' type='button' value='post' /&gt;<br />
+    &lt;/form&gt;<br />
+    &lt;div id='chat'&gt;&lt;/div&gt;<br />
+  &lt;/body&gt;<br />
+&lt;/html&gt;<br />
+[/html]</p>
+<p>ここまで来ればあとはmvn jetty:run　で動く！<br />
+と思っていた。</p>
+<p>が！</p>
+<p>が！</p>
+<p>動かない。</p>
+<p>ずっと原因を追っていくと、servletがwebsocketのリクエストをGetとしてしか受け取ってくれない！！！</p>
+<p>なぜだ！</p>
+<p>と思ったがふとWebSocketの仕様が頭に浮かんで調べてみると、案の定jettyのver7.0は現状のchromeのwebsocket仕様に追いついていなかったらしい。</p>
+<p>なのでpom.xmlのjettyのバージョンを以下に書き換え。<br />
+各jettyのdependencyに関して<br />
+[diff]<br />
+- &lt;version&gt;7.0.1.v20091125&lt;/version&gt;<br />
++ &lt;version&gt;7.5.4.v20111024&lt;/version&gt;<br />
+[/diff]</p>
+<p>pluginに関して<br />
+[diff]<br />
+- &lt;artifactId&gt;maven-jetty-plugin&lt;/artifactId&gt;<br />
++ &lt;artifactId&gt;jetty-maven-plugin&lt;/artifactId&gt;<br />
++ &lt;version&gt;7.5.4.v20111024&lt;/version&gt;<br />
+[/diff]</p>
+<p>そんでバージョンに合わせてソースコードを以下のように編集。<br />
+[scala]<br />
+package com.ymatsu.websample</p>
+<p>import scala.collection.mutable.Set<br />
+import javax.servlet.http._<br />
+import org.eclipse.jetty.websocket._<br />
+import org.eclipse.jetty.websocket.WebSocket.Connection</p>
+<p>class App extends WebSocketServlet {<br />
+  val clients = Set.empty[ChatWebSocket]</p>
+<p>  override def doGet(req:HttpServletRequest, res:HttpServletResponse ) =<br />
+    getServletContext.getNamedDispatcher(&quot;Home&quot;).forward(req, res)</p>
+<p>  override def doWebSocketConnect(req:HttpServletRequest, protocol:String ) =<br />
+    new ChatWebSocket</p>
+<p>  class ChatWebSocket extends WebSocket.OnTextMessage {<br />
+    var connection:Connection = _</p>
+<p>    override def onOpen(connection:Connection ) = {<br />
+      this.connection = connection<br />
+      clients += this<br />
+      onMessage(&quot;WebSocket is success!!!&quot;);<br />
+    }</p>
+<p>    override def onMessage(data:String ) =<br />
+      clients.foreach{ c =&gt; c.connection.sendMessage(data) }</p>
+<p>    override def onClose(code:Int,message:String) = clients -= this</p>
+<p>  }<br />
+}<br />
+[/scala]</p>
+<p>以上でやっとこさ動きましたとさ。</p>
+<p>チャットとしてはこれでも十分動きますが、チャットルームとか欲しいし、保存したいのでもっと色々勉強。</p>
+<p>次はMongoDBとの接続なりやってみようかなと思う次第。</p>

@@ -1,0 +1,81 @@
+---
+layout: post
+title: ScalaでMySQLを使う
+date: 2011-12-19 00:52:17.000000000 +09:00
+categories:
+- Scala
+tags: []
+status: publish
+type: post
+published: true
+meta:
+  _edit_last: '1'
+  _syntaxhighlighter_encoded: '1'
+  _aioseop_title: scalaでmysqlを使う
+  _aioseop_description: scalaでとりあえずmysqlと接続したときのメモ。
+  _aioseop_keywords: scala,mysql,jdbc,scalaquery
+author:
+  login: y_matsuwitter
+  email: me@yuki-matsumoto.com
+  display_name: y_matsuwitter
+  first_name: ''
+  last_name: ''
+---
+<p>新しい言語触り始めた後にアプリつくろうと思うと、大体DB周り気になる。<br />
+ということでScalaからMySQLを触ってみたときのメモ。</p>
+<p>今回はscalaqueryを使いました。<br />
+<a href="https://github.com/szeiger/scala-query" target="_blank">https://github.com/szeiger/scala-query</a></p>
+<p>一応scala-dbcというのがscalaの標準ライブラリに入っているようなのですが、scala2.9.1でこいつを使うと、deprecatedのwarningに苛まれる事になります。<br />
+とりあえず2.9.1では使わないこと推奨？のようなので、Mavenでサクっとscalaquery入れた環境作りましょう。</p>
+<p>使用するプロジェクトはmvn archetype:generateで適当にscalaのプロジェクトとして作成。</p>
+<p>Mavenでscalaquery使うときは、<br />
+[xml]<br />
+ &lt;dependencies&gt;<br />
+    &lt;dependency&gt;<br />
+      &lt;groupId&gt;org.scalaquery&lt;/groupId&gt;<br />
+      &lt;artifactId&gt;scalaquery_2.8.1&lt;/artifactId&gt;<br />
+      &lt;version&gt;0.9.5&lt;/version&gt;<br />
+    &lt;/dependency&gt;<br />
+  &lt;/dependencies&gt;<br />
+  &lt;repositories&gt;<br />
+    &lt;repository&gt;<br />
+      &lt;id&gt;ScalaToolsMaven2Repository&lt;/id&gt;<br />
+      &lt;name&gt;Scala-Tools Maven2 Repository&lt;/name&gt;<br />
+      &lt;url&gt;http://scala-tools.org/repo-releases&lt;/url&gt;<br />
+    &lt;/repository&gt;<br />
+  &lt;/repositories&gt;<br />
+[/xml]</p>
+<p>をpom.xmlに追加しておいてください。<br />
+あと、mysqlのドライバもdependenciesの中に追記！<br />
+[xml]<br />
+    &lt;dependency&gt;<br />
+	  &lt;groupId&gt;mysql&lt;/groupId&gt;<br />
+	  &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;<br />
+	  &lt;version&gt;5.1.6&lt;/version&gt;<br />
+    &lt;/dependency&gt;<br />
+[/xml]</p>
+<p>そんでもってプロジェクトのフォルダで<br />
+[shell]<br />
+mvn scala:console<br />
+[/shell]<br />
+を走らせると、必要なライブラリが入った状態のscalaコンソールが立ち上がります。</p>
+<p>あとはこんな感じでmysqlと接続。<br />
+[scala]<br />
+scala&gt; import org.scalaquery.session.Database<br />
+import org.scalaquery.session.Database</p>
+<p>scala&gt; import org.scalaquery.session.Database.threadLocalSession<br />
+import org.scalaquery.session.Database.threadLocalSession</p>
+<p>scala&gt; import org.scalaquery.simple.StaticQuery._<br />
+import org.scalaquery.simple.StaticQuery._</p>
+<p>scala&gt; val db = Database.forURL(&quot;jdbc:mysql://localhost/test&quot;,driver=&quot;com.mysql.jdbc.Driver&quot;,user=&quot;hoge&quot;,password=&quot;hoge&quot;)<br />
+db: org.scalaquery.session.Database = org.scalaquery.session.Database$$anon$2@3c10098b</p>
+<p>scala&gt; val select = queryNA[(Int,String)](&quot;select id,name from user&quot;)<br />
+select: org.scalaquery.simple.StaticQuery[Unit,(Int, String)] with org.scalaquery.UnitInvokerMixin[(Int, String)] = org.scalaquery.simple.StaticQuery$$anon$1@7cc3feb6</p>
+<p>scala&gt; db withSession{select.list}<br />
+res0: List[(Int, String)] = List((1,y_matsuwitter))<br />
+[/scala]</p>
+<p>scalaqueryの詳しい使い方はまた調べて書きます。<br />
+では。</p>
+<p>参考<br />
+<a href="http://scalaquery.org/download.html" title="http://scalaquery.org/download.html" target="_blank">http://scalaquery.org/download.html</a><br />
+<a href="http://d.hatena.ne.jp/tototoshi/20111119/1321677419" title="http://d.hatena.ne.jp/tototoshi/20111119/1321677419" target="_blank">http://d.hatena.ne.jp/tototoshi/20111119/1321677419</a></p>

@@ -1,0 +1,53 @@
+---
+layout: post
+title: emacsにflymakeとv8,jslint
+date: 2011-08-26 12:34:00.000000000 +09:00
+categories:
+- emacs
+- '[環境]'
+tags: []
+status: publish
+type: post
+published: true
+meta:
+  blogger_blog: yuki-matsumoto-memo.blogspot.com
+  blogger_author: y_matsuhttp://www.blogger.com/profile/06475527170904372273noreply@blogger.com
+  blogger_permalink: /2011/08/emacsflymakev8jslint.html
+  _edit_last: '1'
+  _syntaxhighlighter_encoded: '1'
+author:
+  login: y_matsuwitter
+  email: me@yuki-matsumoto.com
+  display_name: y_matsuwitter
+  first_name: ''
+  last_name: ''
+---
+<p>こいつを使うとさくっと言った。<br />[bash]brew install v8<br />
+cd .~/emacs.d<br />
+git clone https://github.com/valeryz/jslint-v8.git<br />
+cd jslint-v8<br />
+emacs flymake-jslint.el<br />
+[/bash]<br />
+んでjslint-v8-shellを各自の設定で編集。<br />俺の場合<br />[diff]-(defcustom jslint-v8-shell (concat (getenv &quot;HOME&quot;)<br />
+-                                  &quot;/.emacs.d/v8/shell&quot;)<br />
++(defcustom jslint-v8-shell &quot;/usr/local/bin/v8&quot;<br />
+[/diff]brewならこれで通ると思う。</p>
+<p>あとは、.emacsに以下を追加<br />[bash](require 'flymake)<br />
+(add-to-list 'load-path &quot;~/.emacs.d/jslint-v8&quot;)<br />
+(require 'flymake-jslint)<br />
+(add-hook 'js2-mode-hook<br />
+          (lambda () (flymake-mode t)))<br />
+[/bash]あ、javascript-modeの人はjs2-mode-hookをjavascript-mode-hookにしとくといいはず。</p>
+<p>以下はすぎゃーんメモをみて。<br />[bash](global-set-key &quot;\M-e&quot; 'flymake-goto-next-error)<br />
+(global-set-key &quot;\M-E&quot; 'flymake-goto-prev-error)<br />
+;; gotoした際にエラーメッセージをminibufferに表示する<br />
+(defun display-error-message ()<br />
+  (message (get-char-property (point) 'help-echo)))<br />
+(defadvice flymake-goto-prev-error (after flymake-goto-prev-error-display-message)<br />
+  (display-error-message))<br />
+(defadvice flymake-goto-next-error (after flymake-goto-next-error-display-message)<br />
+  (display-error-message))<br />
+(ad-activate 'flymake-goto-prev-error 'flymake-goto-prev-error-display-message)<br />
+(ad-activate 'flymake-goto-next-error 'flymake-goto-next-error-display-message)<br />
+[/bash]参考<br />http://d.hatena.ne.jp/sugyan/20110510/1305036104</p>
+<p>\M-eが思いの外快適だけど早速jslintに怒られまくって欝。</p>

@@ -1,0 +1,35 @@
+---
+layout: post
+title: GoogleAppEngineでdjango1.2.5
+date: 2011-02-15 12:35:00.000000000 +09:00
+categories:
+- google app engine
+tags: []
+status: publish
+type: post
+published: true
+meta:
+  blogger_blog: yuki-matsumoto-memo.blogspot.com
+  blogger_author: y_matsuhttp://www.blogger.com/profile/06475527170904372273noreply@blogger.com
+  blogger_permalink: /2011/02/googleappenginedjango125.html
+  _edit_last: '1'
+author:
+  login: y_matsuwitter
+  email: me@yuki-matsumoto.com
+  display_name: y_matsuwitter
+  first_name: ''
+  last_name: ''
+---
+<p>><span class="Apple-style-span" style="border-collapse: separate; color: black; font-family: 'Hiragino Kaku Gothic Pro'; font-size: small; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px;"><span class="Apple-style-span" style="font-family: Arial,sans-serif; font-size: 13px; line-height: 19px; text-align: left;">
+<pre class="ae-logs-expanded ae-pre-wrap" style="font-family: 'Courier New'; margin: 0px; padding: 0.3em 0px 0.5em 1.5em; white-space: pre-wrap; word-wrap: break-word;">GoogleAppEngineのコンソール眺めてたら、下のWarningが出ていた。</pre>
+<pre class="ae-logs-expanded ae-pre-wrap" style="font-family: 'Courier New'; margin: 0px; padding: 0.3em 0px 0.5em 1.5em; white-space: pre-wrap; word-wrap: break-word;">You are using the default Django version (0.96). The default Django version will change in an App Engine release in the near future.</pre>
+<pre class="ae-logs-expanded ae-pre-wrap" style="font-family: 'Courier New'; margin: 0px; padding: 0.3em 0px 0.5em 1.5em; white-space: pre-wrap; word-wrap: break-word;">&nbsp;</pre>
+<pre class="ae-logs-expanded ae-pre-wrap" style="font-family: 'Courier New'; margin: 0px; padding: 0.3em 0px 0.5em 1.5em; white-space: pre-wrap; word-wrap: break-word;">どうやら、SDK1.4.2ではDjangoがver1.2.5を使えるのだそうだ。</pre>
+<pre class="ae-logs-expanded ae-pre-wrap" style="font-family: 'Courier New'; margin: 0px; padding: 0.3em 0px 0.5em 1.5em; white-space: pre-wrap; word-wrap: break-word;">使うときは以下のように、templateをimportする前に２行追加しておけばいいらしい。</pre>
+<pre class="ae-logs-expanded ae-pre-wrap" style="font-family: 'Courier New'; margin: 0px; padding: 0.3em 0px 0.5em 1.5em; white-space: pre-wrap; word-wrap: break-word;">らくちん！</pre>
+<pre class="ae-logs-expanded ae-pre-wrap" style="font-family: 'Courier New'; margin: 0px; padding: 0.3em 0px 0.5em 1.5em; white-space: pre-wrap; word-wrap: break-word;"></pre>
+<p></span></span>
+<pre class="brush:py">from google.appengine.dist import use_library
+<br />use_library('django', '1.2')
+<br />from google.appengine.ext.webapp import template
+<br /></pre>

@@ -1,0 +1,29 @@
+---
+layout: post
+title: HomebrewでMongoDB入れてみる
+date: 2011-08-13 16:41:00.000000000 +09:00
+categories:
+- homebrew
+- mongodb
+tags: []
+status: publish
+type: post
+published: true
+meta:
+  blogger_blog: yuki-matsumoto-memo.blogspot.com
+  blogger_author: y_matsuhttp://www.blogger.com/profile/06475527170904372273noreply@blogger.com
+  blogger_permalink: /2011/08/homebrewmongodb.html
+  _edit_last: '1'
+author:
+  login: y_matsuwitter
+  email: me@yuki-matsumoto.com
+  display_name: y_matsuwitter
+  first_name: ''
+  last_name: ''
+---
+<p>>とりあえずHomebrew使いたくてうずうずしたので勢いでMongoDB突っ込んだ。</p>
+<pre class="brush:shell">brew install mongodb
+<br />mkdir -p ~/Library/LaunchAgents
+<br />cp /usr/local/Cellar/mongodb/1.8.2-x86_64/org.mongodb.mongod.plist ~/Library/LaunchAgents/
+<br />launchctl load -w ~/Library/LaunchAgents/org.mongodb.mongod.plist
+<br /></pre>

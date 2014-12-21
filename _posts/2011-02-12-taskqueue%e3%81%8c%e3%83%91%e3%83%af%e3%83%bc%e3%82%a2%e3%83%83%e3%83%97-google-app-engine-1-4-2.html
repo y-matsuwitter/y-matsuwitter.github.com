@@ -1,0 +1,29 @@
+---
+layout: post
+title: TaskQueueがパワーアップ google app engine 1.4.2
+date: 2011-02-12 15:30:00.000000000 +09:00
+categories:
+- google app engine
+tags: []
+status: publish
+type: post
+published: true
+meta:
+  blogger_blog: yuki-matsumoto-memo.blogspot.com
+  blogger_author: y_matsuhttp://www.blogger.com/profile/06475527170904372273noreply@blogger.com
+  blogger_permalink: /2011/02/taskqueue-google-app-engine-142.html
+  _edit_last: '1'
+author:
+  login: y_matsuwitter
+  email: me@yuki-matsumoto.com
+  display_name: y_matsuwitter
+  first_name: ''
+  last_name: ''
+---
+<p>><span class="Apple-style-span" style="border-collapse: separate; color: black; font-family: 'Hiragino Kaku Gothic Pro'; font-size: small; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px;"><span class="Apple-style-span" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; line-height: 15px;">いつの間にかapp engineが1.4.2になってた。 </span></span><br /><span class="Apple-style-span" style="border-collapse: separate; color: black; font-family: 'Hiragino Kaku Gothic Pro'; font-size: small; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px;"><span class="Apple-style-span" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; line-height: 15px;">XMPPは使わんのでTaskQueueに関してのみメモ。</span></span><br /><span class="Apple-style-span" style="border-collapse: separate; color: black; font-family: 'Hiragino Kaku Gothic Pro'; font-size: small; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px;"><span class="Apple-style-span" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; line-height: 15px;"><br /></span></span><br /><span class="Apple-style-span" style="border-collapse: separate; color: black; font-family: 'Hiragino Kaku Gothic Pro'; font-size: small; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px;"><span class="Apple-style-span" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; line-height: 15px;">Googleの公式によると、TaskQueueに以下の機能が加わったそうで。</span></span>
+<ul>
+<li><span class="Apple-style-span" style="border-collapse: separate; color: black; font-family: 'Hiragino Kaku Gothic Pro'; font-size: small; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px;"><span class="Apple-style-span" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; line-height: 15px;">TaskQueueのタスク処理速度の上限を毎秒100 tasksにしてやった</span></span></li>
+<li><span class="Apple-style-span" style="border-collapse: separate; color: black; font-family: 'Hiragino Kaku Gothic Pro'; font-size: small; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px;"><span class="Apple-style-span" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; line-height: 15px;">Queueごとの同時リクエスト数最大値をqueue.yaml(javaはxmlだったっけ？)で指定可能にした。</span></span></li>
+<li><span class="Apple-style-span" style="border-collapse: separate; color: black; font-family: 'Hiragino Kaku Gothic Pro'; font-size: small; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px;"><span class="Apple-style-span" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; line-height: 15px;">&nbsp;手動でなくプログラムでQueueを削除できるようにした。&nbsp;</span></span></li>
+</ul>
+<p><span class="Apple-style-span" style="border-collapse: separate; color: black; font-family: 'Hiragino Kaku Gothic Pro'; font-size: small; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px;"><span class="Apple-style-span" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; line-height: 15px;">TaskQueue いいね！</span></span><br /><span class="Apple-style-span" style="border-collapse: separate; color: black; font-family: 'Hiragino Kaku Gothic Pro'; font-size: small; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px;"><span class="Apple-style-span" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; line-height: 15px;"><br /></span></span><br /><span class="Apple-style-span" style="border-collapse: separate; color: black; font-family: 'Hiragino Kaku Gothic Pro'; font-size: small; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px;"><span class="Apple-style-span" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; line-height: 15px;"><br /></span></span></p>

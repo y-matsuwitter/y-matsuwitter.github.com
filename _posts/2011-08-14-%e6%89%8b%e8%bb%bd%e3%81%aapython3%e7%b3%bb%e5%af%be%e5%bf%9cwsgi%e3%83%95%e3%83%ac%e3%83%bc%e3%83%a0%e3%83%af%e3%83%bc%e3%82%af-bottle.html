@@ -1,0 +1,35 @@
+---
+layout: post
+title: 手軽なpython3系対応WSGIフレームワーク bottle
+date: 2011-08-14 15:25:00.000000000 +09:00
+categories:
+- bottle
+- Python
+tags: []
+status: publish
+type: post
+published: true
+meta:
+  blogger_blog: yuki-matsumoto-memo.blogspot.com
+  blogger_author: y_matsuhttp://www.blogger.com/profile/06475527170904372273noreply@blogger.com
+  blogger_permalink: /2011/08/python3wsgi-bottle.html
+  _edit_last: '1'
+  _syntaxhighlighter_encoded: '1'
+author:
+  login: y_matsuwitter
+  email: me@yuki-matsumoto.com
+  display_name: y_matsuwitter
+  first_name: ''
+  last_name: ''
+---
+<p>>bottleというフレームワークが素晴らしくシンプルだったので、書いてみる。</p>
+<p>まずはインストール。<br />[bash]pip install bottle<br />
+[/bash]<br />適当なフォルダに以下のファイル作成。<br />test.py<br />[python]from bottle import route, run</p>
+<p>@route('/hello/:name')<br />
+def index(name='World'):<br />
+    return '&lt;b&gt;Hello %s!&lt;/b&gt;' % name</p>
+<p>run(host='localhost', port=8100)<br />
+[/python]<br />あとは実行するだけ。<br />[bash]python test.py<br />
+[/bash]<br />http://localhost:8100/hello/matsu で以下の画面が出る。</p>
+<div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/-ih3eplZqLhk/TkdqECzUiII/AAAAAAAAAAg/A3Gr1wgqm1I/s1600/%25E3%2582%25B9%25E3%2582%25AF%25E3%2583%25AA%25E3%2583%25BC%25E3%2583%25B3%25E3%2582%25B7%25E3%2583%25A7%25E3%2583%2583%25E3%2583%2588%25EF%25BC%25882011-08-14%2B15.23.28%25EF%25BC%2589.png" imageanchor="1" style="clear:left; float:left;margin-right:1em; margin-bottom:1em"><img border="0" height="54" width="143" src="assets/%25E3%2582%25B9%25E3%2582%25AF%25E3%2583%25AA%25E3%2583%25BC%25E3%2583%25B3%25E3%2582%25B7%25E3%2583%25A7%25E3%2583%2583%25E3%2583%2588%25EF%25BC%25882011-08-14%2B15.23.28%25EF%25BC%2589.png" /></a></div>
+<p>超簡単！</p>

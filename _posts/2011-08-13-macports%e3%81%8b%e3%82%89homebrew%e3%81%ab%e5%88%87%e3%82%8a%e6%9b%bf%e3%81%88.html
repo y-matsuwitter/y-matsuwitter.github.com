@@ -1,0 +1,44 @@
+---
+layout: post
+title: MacportsからHomebrewに切り替え
+date: 2011-08-13 16:02:00.000000000 +09:00
+categories:
+- '[環境]'
+tags: []
+status: publish
+type: post
+published: true
+meta:
+  blogger_blog: yuki-matsumoto-memo.blogspot.com
+  blogger_author: y_matsuhttp://www.blogger.com/profile/06475527170904372273noreply@blogger.com
+  blogger_permalink: /2011/08/homebrew.html
+  _edit_last: '1'
+  _syntaxhighlighter_encoded: '1'
+author:
+  login: y_matsuwitter
+  email: me@yuki-matsumoto.com
+  display_name: y_matsuwitter
+  first_name: ''
+  last_name: ''
+---
+<p>&gt;Macports使ってたけど、毎回CPU使用率100％にされるのが嫌だったのでHomebrewに切り替えた。</p>
+<p>以下メモ。</p>
+<p>事前にXcode入れとくと、gitがインストールされるので捗る。<br />
+[sourcecode language="bash"]<br />
+sudo port -f uninstall installed<br />
+sudo rm -rf \<br />
+    /opt/local \<br />
+    /Applications/DarwinPorts \<br />
+    /Applications/MacPorts \<br />
+    /Library/LaunchDaemons/org.macports.* \<br />
+    /Library/Receipts/DarwinPorts*.pkg \<br />
+    /Library/Receipts/MacPorts*.pkg \<br />
+    /Library/StartupItems/DarwinPortsStartup \<br />
+    /Library/Tcl/darwinports1.0 \<br />
+    /Library/Tcl/macports1.0 \<br />
+    ~/.macports<br />
+ruby -e &quot;$(curl -fsS https://raw.github.com/gist/323731/install_homebrew.rb)&quot;<br />
+sudo chown -R $USER /usr/local<br />
+brew update<br />
+[/sourcecode]<br />
+Macportsでインストールしてるパッケージ数少なかったので、あっさり移行完了した。</p>

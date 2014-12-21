@@ -1,0 +1,54 @@
+---
+layout: post
+title: Pathがアドレス帳をすべてサーバーにアップさせてただって？(誤訳御免)
+date: 2012-02-08 13:07:53.000000000 +09:00
+categories:
+- ビジネス
+tags: []
+status: private
+type: post
+published: false
+meta:
+  _edit_last: '1'
+  _sd_is_markdown: '1'
+author:
+  login: y_matsuwitter
+  email: me@yuki-matsumoto.com
+  display_name: y_matsuwitter
+  first_name: ''
+  last_name: ''
+---
+<p>元記事はこちら。</p>
+<p><a title="http://mclov.in/2012/02/08/path-uploads-your-entire-address-book-to-their-servers.html#comment-432202082" href="http://mclov.in/2012/02/08/path-uploads-your-entire-address-book-to-their-servers.html">http://mclov.in/2012/02/08/path-uploads-your-entire-address-book-to-their-servers.html</a></p>
+<p>Pathが全アドレスブックデータをサーバーにあげてたらしい。</p>
+<p>それを発見した人のブログ記事を英語の勉強がてら超意訳してみた。</p>
+<p>誤訳御免。</p>
+<h6>#</h6>
+<p>始まりはふとしたことだったんだ。</p>
+<p>定例のハッカソンで僕はPathの実装について考えていた。</p>
+<p>そこで先日Hacker Newsを騒がせた素晴らしいmitmproxyってツールでPathのiPhoneからサーバーへの通信を観察してみた。</p>
+<p>これらは全く無害なものだと思っていたんだ。</p>
+<p><code id="aeaoofnhgocdbnbeljkmbjdmhbcokfdb-mousedown">https://api.path.com/3/contacts/addへのPOST</code> リクエストを覗くまではね。</p>
+<p>よくよく見てみると、<strong>僕のアドレス帳の全データがplist形式でPathへ送られていることが分かったんだ</strong>。</p>
+<p>Pathに対してアドレス帳のアクセス許可やそのサーバーへの送信を許可した記憶なんて無かったから、とりあえずもう一度新しくPathをインストールして実験してみた。</p>
+<p>そしてその結果は全く同じだった。つまり僕のアドレス帳の全データがサーバーへ送られていたんだ。</p>
+<h2><strong>注意</strong></h2>
+<p>僕はPathが僕のアドレス帳データを使って何かひどいことをしているなんて全く思ってないよ。</p>
+<p>ただサードパーティー製のアプリにアドレス帳のデータが送られるような事実が怖い。</p>
+<p>僕はiOSアプリとしてPathを愛しているし素晴らしいエンジニアがそこで働いているんだと思う。</p>
+<p>ただ無意識にアドレス帳が送信されるという事実だけはちょっと怖い。</p>
+<p>他のiOSアプリが同じことをやっているかもしれないんだから・・・</p>
+<h3>追記</h3>
+<p>PathのCEODave Morinからコメントで返信があったので掲載しておく。</p>
+<p>我々はこの問題に関して慎重に議論すべきだと思う。</p>
+<p>余談だけど、こんな風に返信がもらえるなんて全く考えもしなかった。</p>
+<blockquote><p>Aran、指摘ありがとう。</p>
+<p>これが非常に大事な議論であり、真剣に行うべきだと思う。</p>
+<p>我々はユーザーに友達を見つけて繋がってもらい、Pathに早く親しんでもらうために、そして友達や家族がPathに参加したときにお知らせするためにアドレス帳をサーバーへアップロードしていたんだ。それ以上の他意はない。</p>
+<p>我々はこう行った友達の発見とマッチングがこの産業にとって重要でありユーザーがそのことを理解していることも重要だと信じている。故に我々は率先してAndroidクライアント向けのアドレス帳収集のオプトインを数週前に実装し、iOSアプリのver2.0.6でも実装しAppStoreの許可を待っている。</p>
+<p>Dave Morin</p>
+<p>Co-Founder and CEO of Path</p></blockquote>
+<div></div>
+<h6>######翻訳ここまで</h6>
+<p>Pathは素晴らしいアプリだと思いますし、この問題に関してはユーザーデータの利用に関して許可設定の強制が機能していないAppleの手落ちだと思います。</p>
+<p>何にせよ、自分の情報が簡単に抜かれ得る、という事実にだけは留意したほうが良いですね。</p>
