@@ -1,0 +1,52 @@
+---
+layout: post
+title: RubyからGrowlに通知
+date: 2012-01-20 23:55:33.000000000 +09:00
+categories:
+- 未分類
+tags: []
+status: publish
+type: post
+published: true
+meta:
+  _syntaxhighlighter_encoded: '1'
+  _edit_last: '1'
+author:
+  login: y_matsuwitter
+  email: me@yuki-matsumoto.com
+  display_name: y_matsuwitter
+  first_name: ''
+  last_name: ''
+---
+<p>最近Rubyistに転向してます。</p>
+<p>Python、Scalaが大好きですけど、モテ言語のRubyに口説かれました。</p>
+<p>&nbsp;</p>
+<p>色々ライブラリを眺めているところで、RubyからふとGrowlに通知させたくなったのでメモ。</p>
+<p>&nbsp;</p>
+<p>&nbsp;<br />
+Growlのバージョンは1.2.3です。<br />
+まずはhomebrewのパッケージの中にGrowlnotifyが見つからなかったので、Growlの公式サイトから1.2.3のdmgファイルを落としてきて、中にあるExtraのgrowlnotifyをインストールします。<br />
+これは必ず必要なわけじゃないですけど、ノリです。</p>
+<p>次にGrowlの環境設定 > ネットワークを開いて</p>
+<ul>
+<li>受信される通知を聞く</li>
+<li>リモートアプリケーション登録を許可</li>
+</ul>
+<p>にチェックを入れます。<br />
+そして、サーバーパスワードに任意のパスワードを登録してください。</p>
+<p>あとはgemで必要なライブラリを入れて、簡単なコード書くだけで通知が出来ます。<br />
+[shell]<br />
+gem install ruby-growl<br />
+[/shell]</p>
+<p>[ruby]<br />
+require 'ruby-growl'<br />
+app_name = 'ruby-growl' # Growlに登録されるアプリ名</p>
+<p>all_notifications = ['ruby-growl'] # Growlに登録される通知名</p>
+<p>default_notification = 'ruby-growl' # デフォルトで使用される通知名</p>
+<p>password = 'tekitoudesuyokoremajide' #さっき設定したパスワード</p>
+<p>growl = Growl.new 'localhost',app_name, all_notifications, default_notification, password</p>
+<p>growl.notify default_notification, 'タイトル', '内容'</p>
+<p>[/ruby]<br />
+以上のコードを実行すると、タイトル、内容と書かれた通知が現れます。<br />
+アプリ名、通知名に関しては、Growlの環境設定みれば分かると思いますんで、省略します。</p>
+<p>あとは上のコード参考にして煮るなり焼くなりしてください。</p>

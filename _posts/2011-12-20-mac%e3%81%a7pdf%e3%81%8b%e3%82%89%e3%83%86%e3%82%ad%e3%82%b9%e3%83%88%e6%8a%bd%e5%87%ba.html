@@ -1,0 +1,34 @@
+---
+layout: post
+title: MacでPDFからテキスト抽出
+date: 2011-12-20 02:22:00.000000000 +09:00
+categories:
+- homebrew
+- プログラミング
+tags: []
+status: publish
+type: post
+published: true
+meta:
+  blogger_blog: yuki-matsumoto-memo.blogspot.com
+  blogger_author: y_matsuhttp://www.blogger.com/profile/04324563030483683889noreply@blogger.com
+  blogger_permalink: /feeds/2050754602244283023/posts/default/3553813861249095748
+  _edit_last: '1'
+  _syntaxhighlighter_encoded: '1'
+author:
+  login: y_matsuwitter
+  email: me@yuki-matsumoto.com
+  display_name: y_matsuwitter
+  first_name: ''
+  last_name: ''
+---
+<p>有価証券報告書の中からテキスト抽出したいなあと思ったのだけど、その時につまずいた部分のメモ。</p>
+<p>XPDF使えばいいはずだったのに、そうでもなかった。</p>
+<p>[shell]<br />
+brew install xpdf<br />
+brew install poppler<br />
+[/shell]<br />
+でpdftotextコマンドが日本語に対応する。<br />
+というか多分後者だけで良いのかもしれない。<br />
+popplerはxpdfから派生したものなので。</p>
+<p>後はよしなに。</p>

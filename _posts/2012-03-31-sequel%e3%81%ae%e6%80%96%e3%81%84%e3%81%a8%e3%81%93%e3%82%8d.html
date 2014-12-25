@@ -1,0 +1,34 @@
+---
+layout: post
+title: Sequelの怖いところ
+date: 2012-03-31 15:01:11.000000000 +09:00
+categories:
+- Ruby
+tags: []
+status: publish
+type: post
+published: true
+meta:
+  _edit_last: '1'
+author:
+  login: y_matsuwitter
+  email: me@yuki-matsumoto.com
+  display_name: y_matsuwitter
+  first_name: ''
+  last_name: ''
+---
+<p>Sequelでハマったのでメモ。</p>
+<h2>JOIN</h2>
+<p>Sequelでjoinするときにjoinされるテーブルとjoinするテーブル双方にidがあると、fetchの結果のidがjoinするテーブル側になる場合があります。</p>
+<p>どっちのidも必要な場合は、graphを使いましょう。</p>
+<h2>LIKE</h2>
+<p>SequelのlikeはデフォルトだとLIKE BINARYを発行するので、大文字小文字が区別されてしまいます。</p>
+<p>ilikeを使いましょう。</p>
+<p>ハマるたびに更新していこう、この記事・・・</p>
+<h2>IN</h2>
+<p>DB[:users].where(:name =&gt; []).all</p>
+<p>where条件に空配列加えたときのクエリが、以下になります。</p>
+<p>SELECT * from users where name != name;</p>
+<p>こいつ、テーブル内をすべてスキャンするのでとても重い上に、何も返ってこないという酷いもので、スロークエリに頻繁に登場していた。</p>
+<p>最初原因が分からなくて、なんぞ！ってキレたくなったのがこいつです。</p>
+<p>空配列はsequelに突っ込んではいけません。</p>

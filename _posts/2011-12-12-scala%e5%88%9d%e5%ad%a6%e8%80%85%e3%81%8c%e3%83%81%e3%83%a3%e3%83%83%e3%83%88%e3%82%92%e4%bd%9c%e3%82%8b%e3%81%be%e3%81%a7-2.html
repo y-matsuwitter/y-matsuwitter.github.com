@@ -1,0 +1,68 @@
+---
+layout: post
+title: Scala初学者がチャットを作るまで 2
+date: 2011-12-12 17:07:08.000000000 +09:00
+categories:
+- Scala
+tags: []
+status: publish
+type: post
+published: true
+meta:
+  _edit_last: '1'
+  _syntaxhighlighter_encoded: '1'
+author:
+  login: y_matsuwitter
+  email: me@yuki-matsumoto.com
+  display_name: y_matsuwitter
+  first_name: ''
+  last_name: ''
+---
+<p>とりあえずまずScalaの環境を構築するところから始める。<br />
+なんか既にチャットでいいのか？という気がしてきたがとりあえず作ろう。</p>
+<p>Scala自体のインストールは、<br />
+Macであれば<br />
+[shell]<br />
+brew install scala<br />
+[/shell]</p>
+<p>ubuntuなら<br />
+[shell]<br />
+sudo apt-get install scala<br />
+[/shell]</p>
+<p>次に、インストールは終わってるのですがEmacsの環境構築のためにScalaを公式ページよりダウンロード。<br />
+[shell]<br />
+wget http://www.scala-lang.org/downloads/distrib/files/scala-2.9.1.final.tgz<br />
+tar zxf scala-2.9.1.final.tgz<br />
+[/shell]</p>
+<p>その中にEmacsへのサポートが含まれているのでそれらを~/.emacs.d以下にコピーしましょう。<br />
+[shell]<br />
+cd scala-2.9.1.final<br />
+cp -r misc/scala-tool-support/emacs ~/.emacs.d/scala-mode<br />
+[/shell]</p>
+<p>さらにIDE的な機能の追加。<br />
+[shell]<br />
+brew install sbt<br />
+wget https://github.com/downloads/aemoncannon/ensime/ensime_2.9.2-SNAPSHOT-0.8.0.RC3.tar.gz<br />
+tar zxf ensime_2.9.2-SNAPSHOT-0.8.0.RC3.tar.gz<br />
+cp -r ensime_2.9.2-SNAPSHOT-0.8.0.RC3 ~/.emacs.d/ensime<br />
+[/shell]</p>
+<p>最後に.emacsに追記。<br />
+[shell]<br />
+(add-to-list 'load-path &quot;~/.emacs.d/scala-mode&quot;)<br />
+(require 'scala-mode-auto)<br />
+(require 'scala-mode-feature-electric)<br />
+(add-hook 'scala-mode-hook<br />
+     (lambda ()<br />
+	(scala-electric-mode)))<br />
+(add-to-list 'load-path &quot;~/.emacs.d/ensime/elisp/&quot;)<br />
+(require 'ensime)<br />
+(add-hook 'scala-mode-hook 'ensime-scala-mode-hook)<br />
+[/shell]</p>
+<p>このensimeというやつはmavenなどと連携してプロジェクト管理を上手くやってくれるらしいのだが、javaあまりやらないから別途勉強することにして、自動補完機能にだけ感謝しておく。</p>
+<p>以上でとりあえずEmacsでScalaの作業がしやすくなった。</p>
+<p>ちなみにEnsimeに関しては公式ドキュメント読んでください。</p>
+<p>参考にしたページ<br />
+<a href="http://codezine.jp/article/detail/5193" target="_blank">http://codezine.jp/article/detail/5193</a><br />
+<a href="http://d.hatena.ne.jp/tototoshi/20100925/1285420294" target="_blank">http://d.hatena.ne.jp/tototoshi/20100925/1285420294</a><br />
+<a href="http://d.hatena.ne.jp/tototoshi/20100927/1285595939">http://d.hatena.ne.jp/tototoshi/20100927/1285595939</a><br />
+<a href="http://aemon.com/file_dump/ensime_manual.html">Ensime 公式ドキュメント</a></p>

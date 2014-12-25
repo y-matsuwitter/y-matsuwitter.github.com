@@ -1,0 +1,58 @@
+---
+layout: post
+title: 1晩でサービスを公開するためのrailsレシピ
+date: 2012-07-17 02:28:39.000000000 +09:00
+categories:
+- 未分類
+tags: []
+status: private
+type: post
+published: false
+meta:
+  _edit_last: '1'
+author:
+  login: y_matsuwitter
+  email: me@yuki-matsumoto.com
+  display_name: y_matsuwitter
+  first_name: ''
+  last_name: ''
+---
+<p>今回railsで早くサービスを創り上げるために僕がやったいくつかの手順。</p>
+<p>rails new myGems -d mysql</p>
+<p>vi Gemfile</p>
+<p>以下を追記</p>
+<p>assetsに</p>
+<p>gem "twitter-bootstrap-rails"</p>
+<p>gem 'less-rails'</p>
+<p>それ以外に</p>
+<p>gem 'rails-backbone'</p>
+<p>gem 'bcrypt-ruby'</p>
+<p>gem 'unicorn'</p>
+<p>gem 'capistrano'</p>
+<p>gem 'omniauth'</p>
+<p>gem 'omniauth-twitter'</p>
+<p>group :development, :test do</p>
+<p>#spec</p>
+<p>gem 'rspec'</p>
+<p>gem 'rspec-rails'</p>
+<p>gem 'spork'</p>
+<p>gem 'guard'</p>
+<p>gem 'guard-spork'</p>
+<p>gem 'guard-rspec'</p>
+<p>gem 'guard-test'</p>
+<p>gem 'growl'</p>
+<p>gem 'growl_notify'</p>
+<p>end</p>
+<p>bundle update</p>
+<p>capify .</p>
+<p>rails g bootstrap:install</p>
+<p>rails g backbone:install</p>
+<p>rails g rspec:install</p>
+<p>rails g model User name:string screen_name:string provider:string uid:string token:string token_secret:string</p>
+<p>rails g model gemdata title:string viewed:integer</p>
+<p>rails g model comment description: string fav:integer user:belongs_to gemdata:belongs_to</p>
+<p>rails g model tag title:string</p>
+<p>rails g model using user:belongs_to gemdata:belongs_to</p>
+<p>migrationファイル書き換え</p>
+<p>controller作成</p>
+<p>rails g controller session callback logout</p>
